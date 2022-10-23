@@ -8,8 +8,7 @@ import Filter from './Filter/Filter';
 import { nanoid } from 'nanoid';
 
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Phonebook = styled.section`
   display: flex;
@@ -40,14 +39,12 @@ const Phonebook = styled.section`
 const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
-  const [visibleContacts, setVisibleContacts] = useState([]);
 
   const isFirstRender = useRef(true);
 
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('contacts'));
     setContacts(items);
-    setVisibleContacts(items);
   }, []);
 
   useEffect(() => {
@@ -58,25 +55,16 @@ const App = () => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  useEffect(() => {
-    const searchString = filter.toLowerCase();
-    if (contacts) {
-      setVisibleContacts(contacts.filter(({ name }) => name.toLowerCase().includes(searchString)));
-    }
-  }, [contacts, filter]);
-
   const addContact = (name, number) => {
     if (contacts && contacts.some(contact => contact.name === name)) {
       alert(`${name} already exist`);
       return false;
     }
-
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-
     if (!contacts) setContacts([contact]);
     else setContacts(state => [contact, ...state]);
 
@@ -90,6 +78,12 @@ const App = () => {
   const removeContact = id => {
     setContacts(state => state.filter(contact => contact.id !== id));
   };
+
+  let visibleContacts = contacts;
+  if (contacts) {
+    const searchString = filter.toLowerCase();
+    visibleContacts = contacts.filter(({ name }) => name.toLowerCase().includes(searchString));
+  }
 
   return (
     <Phonebook>
