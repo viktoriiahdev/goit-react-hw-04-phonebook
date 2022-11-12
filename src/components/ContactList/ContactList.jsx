@@ -8,19 +8,20 @@ import { HiOutlineX } from 'react-icons/hi';
 
 const ContactList = ({ contacts, onClick }) => (
   <List>
-    {contacts.map(({ id, name, number }) => (
-      <ContactItem key={id}>
-        <p className="ContactItem__name">{name}</p>
-        <p className="ContactItem__number">{number}</p>
-        <ButtonWithIcon
-          aria-label="Remove contact"
-          className="ContactItem__remove"
-          onClick={() => onClick(id)}
-        >
-          <HiOutlineX color="red" />
-        </ButtonWithIcon>
-      </ContactItem>
-    ))}
+    {contacts &&
+      contacts.map(({ id, name, number }) => (
+        <ContactItem key={id}>
+          <p className="ContactItem__name">{name}</p>
+          <p className="ContactItem__number">{number}</p>
+          <ButtonWithIcon
+            aria-label="Remove contact"
+            className="ContactItem__remove"
+            onClick={() => onClick(id)}
+          >
+            <HiOutlineX color="red" />
+          </ButtonWithIcon>
+        </ContactItem>
+      ))}
   </List>
 );
 
